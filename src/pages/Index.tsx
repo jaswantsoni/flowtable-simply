@@ -97,7 +97,7 @@ const Index = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
           <div className="animate-slide-up" style={{ animationDelay: "100ms" }}>
             <DataTable
               title="Advertisers"
@@ -117,10 +117,10 @@ const Index = () => {
               onRefresh={loadPublishers}
             />
           </div>
+        </div>
 
-          <div className="animate-slide-up" style={{ animationDelay: "300ms" }}>
-            <DataForm onSubmit={handleFormSubmit} />
-          </div>
+        <div className="animate-slide-up" style={{ animationDelay: "300ms" }}>
+          <DataForm onSubmit={handleFormSubmit} />
         </div>
       </div>
     </div>

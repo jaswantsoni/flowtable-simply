@@ -3,6 +3,14 @@ import React from "react";
 import { Publisher, Advertiser } from "@/types";
 import { formatCurrency, formatNumber, formatDate } from "@/lib/data";
 import TableHeader from "./TableHeader";
+import {
+  Table,
+  TableHeader as ShadcnTableHeader,
+  TableBody,
+  TableHead,
+  TableRow,
+  TableCell
+} from "@/components/ui/table";
 
 interface DataTableProps<T> {
   data: T[];
@@ -48,66 +56,51 @@ const DataTable = <T extends Advertiser | Publisher>({
   };
 
   const renderAdvertiserTable = (advertisers: Advertiser[]) => (
-    <table>
-      <thead>
-        <tr>
-          <th>Advertiser</th>
-          <th>Budget</th>
-          <th>Spent</th>
-          <th>Campaigns</th>
-          <th>Status</th>
-          <th>Last Updated</th>
-        </tr>
-      </thead>
-      <tbody>
+    <Table>
+      <ShadcnTableHeader>
+        <TableRow>
+          <TableHead>ID</TableHead>
+          <TableHead>Name</TableHead>
+          <TableHead>Capping</TableHead>
+          <TableHead>Used Capping</TableHead>
+        </TableRow>
+      </ShadcnTableHeader>
+      <TableBody>
         {advertisers.map((advertiser) => (
-          <tr key={advertiser.id} className="group">
-            <td className="font-medium">{advertiser.name}</td>
-            <td>{formatCurrency(advertiser.budget)}</td>
-            <td>{formatCurrency(advertiser.spent)}</td>
-            <td>{advertiser.campaigns}</td>
-            <td>
-              <span
-                className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${
-                  advertiser.status === "Active"
-                    ? "bg-green-50 text-green-700"
-                    : advertiser.status === "Paused"
-                    ? "bg-amber-50 text-amber-700"
-                    : "bg-blue-50 text-blue-700"
-                }`}
-              >
-                {advertiser.status}
-              </span>
-            </td>
-            <td className="text-muted-foreground">{formatDate(advertiser.lastUpdated)}</td>
-          </tr>
+          <TableRow key={advertiser.id} className="group">
+            <TableCell>{advertiser.id}</TableCell>
+            <TableCell className="font-medium">{advertiser.name}</TableCell>
+            <TableCell>{formatCurrency(advertiser.budget)}</TableCell>
+            <TableCell>{formatCurrency(advertiser.spent)}</TableCell>
+          </TableRow>
         ))}
-      </tbody>
-    </table>
+      </TableBody>
+    </Table>
   );
 
   const renderPublisherTable = (publishers: Publisher[]) => (
-    <table>
-      <thead>
-        <tr>
-          <th>Publisher</th>
-          <th>Category</th>
-          <th>Impressions</th>
-          <th>Clicks</th>
-          <th>Revenue</th>
-          <th>Status</th>
-          <th>Last Updated</th>
-        </tr>
-      </thead>
-      <tbody>
+    <Table>
+      <ShadcnTableHeader>
+        <TableRow>
+          <TableHead>ID</TableHead>
+          <TableHead>Name</TableHead>
+          <TableHead>Cap</TableHead>
+          <TableHead>Block Rule</TableHead>
+          <TableHead>Used Cap</TableHead>
+          <TableHead>Total Success Hits</TableHead>
+          <TableHead>Blocked</TableHead>
+        </TableRow>
+      </ShadcnTableHeader>
+      <TableBody>
         {publishers.map((publisher) => (
-          <tr key={publisher.id} className="group">
-            <td className="font-medium">{publisher.name}</td>
-            <td>{publisher.category}</td>
-            <td>{formatNumber(publisher.impressions)}</td>
-            <td>{formatNumber(publisher.clicks)}</td>
-            <td>{formatCurrency(publisher.revenue)}</td>
-            <td>
+          <TableRow key={publisher.id} className="group">
+            <TableCell>{publisher.id}</TableCell>
+            <TableCell className="font-medium">{publisher.name}</TableCell>
+            <TableCell>{formatNumber(publisher.impressions)}</TableCell>
+            <TableCell>{publisher.category}</TableCell>
+            <TableCell>{formatNumber(publisher.clicks)}</TableCell>
+            <TableCell>{formatCurrency(publisher.revenue)}</TableCell>
+            <TableCell>
               <span
                 className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${
                   publisher.status === "Active"
@@ -119,12 +112,11 @@ const DataTable = <T extends Advertiser | Publisher>({
               >
                 {publisher.status}
               </span>
-            </td>
-            <td className="text-muted-foreground">{formatDate(publisher.lastUpdated)}</td>
-          </tr>
+            </TableCell>
+          </TableRow>
         ))}
-      </tbody>
-    </table>
+      </TableBody>
+    </Table>
   );
 
   return (
@@ -136,17 +128,17 @@ const DataTable = <T extends Advertiser | Publisher>({
         isLoading={isLoading}
       />
       
-      <div className="table-container">
-        <div className="table-wrapper">
-          {renderTable()}
-        </div>
-        
-        {isLoading && (
-          <div className="table-loading animate-fade-in">
+      <div className="relative overflow-hidden">
+        {isLoading ? (
+          <div className="flex justify-center items-center py-12">
             <div className="flex flex-col items-center">
               <div className="h-5 w-5 rounded-full border-2 border-primary/30 border-t-primary animate-spin"></div>
               <p className="mt-2 text-sm text-muted-foreground">Loading data...</p>
             </div>
+          </div>
+        ) : (
+          <div className="bg-background rounded-md border">
+            {renderTable()}
           </div>
         )}
       </div>
