@@ -5,6 +5,7 @@ import DataForm from "@/components/DataForm";
 import { Advertiser, Publisher, FormData } from "@/types";
 import { advertisers as initialAdvertisers, publishers as initialPublishers } from "@/lib/data";
 import { toast } from "sonner";
+import ThemeToggle from "@/components/ThemeToggle";
 
 const Index = () => {
   const [advertisers, setAdvertisers] = useState<Advertiser[]>([]);
@@ -88,17 +89,20 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="space-y-3 text-center mb-10 animate-fade-in">
-          <h1 className="text-3xl font-semibold tracking-tight">Data Flow Tables</h1>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            View and manage advertising and publishing data with interactive tables
-          </p>
+    <div className="min-h-screen bg-background overflow-hidden">
+      <div className="max-w-[1440px] h-screen mx-auto px-4 py-6 flex flex-col">
+        <div className="flex justify-between items-center mb-6">
+          <div className="space-y-2 text-left animate-fade-in">
+            <h1 className="text-2xl md:text-3xl font-semibold tracking-tight">Data Flow Tables</h1>
+            <p className="text-muted-foreground text-sm md:text-base">
+              View and manage advertising and publishing data with interactive tables
+            </p>
+          </div>
+          <ThemeToggle />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-          <div className="animate-slide-up" style={{ animationDelay: "100ms" }}>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 flex-1 overflow-hidden mb-4">
+          <div className="animate-slide-up h-full flex flex-col" style={{ animationDelay: "100ms" }}>
             <DataTable
               title="Advertisers"
               data={advertisers}
@@ -108,7 +112,7 @@ const Index = () => {
             />
           </div>
 
-          <div className="animate-slide-up" style={{ animationDelay: "200ms" }}>
+          <div className="animate-slide-up h-full flex flex-col" style={{ animationDelay: "200ms" }}>
             <DataTable
               title="Publishers"
               data={publishers}

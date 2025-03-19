@@ -13,7 +13,7 @@ const TableHeader = ({ title, onFlush, onRefresh, isLoading }: TableHeaderProps)
     <div className="flex items-center justify-between mb-3">
       <div className="space-y-1">
         <p className="text-xs text-muted-foreground">Data Table</p>
-        <h2 className="text-xl font-medium tracking-tight">{title}</h2>
+        <h2 className="text-lg font-medium tracking-tight">{title}</h2>
       </div>
       <div className="flex space-x-2">
         <button

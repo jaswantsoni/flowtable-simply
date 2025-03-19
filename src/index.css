@@ -14,7 +14,7 @@
     --popover: 0 0% 100%;
     --popover-foreground: 240 10% 3.9%;
 
-    --primary: 240 5.9% 10%;
+    --primary: 121 81% 45%; /* Spotify green */
     --primary-foreground: 0 0% 98%;
 
     --secondary: 240 4.8% 95.9%;
@@ -23,17 +23,17 @@
     --muted: 240 4.8% 95.9%;
     --muted-foreground: 240 3.8% 46.1%;
 
-    --accent: 240 4.8% 95.9%;
-    --accent-foreground: 240 5.9% 10%;
+    --accent: 134 70% 45%;  /* Spotify accent */
+    --accent-foreground: 0 0% 98%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
 
     --border: 240 5.9% 90%;
     --input: 240 5.9% 90%;
-    --ring: 240 5.9% 10%;
+    --ring: 121 81% 45%;
 
-    --radius: 0.75rem;
+    --radius: 0.5rem;
 
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -46,25 +46,26 @@
   }
 
   .dark {
-    --background: 240 10% 3.9%;
+    /* Spotify-inspired dark theme */
+    --background: 0 0% 7%;
     --foreground: 0 0% 98%;
 
-    --card: 240 10% 3.9%;
+    --card: 0 0% 7%;
     --card-foreground: 0 0% 98%;
 
-    --popover: 240 10% 3.9%;
+    --popover: 0 0% 7%;
     --popover-foreground: 0 0% 98%;
 
-    --primary: 0 0% 98%;
-    --primary-foreground: 240 5.9% 10%;
+    --primary: 121 81% 45%; /* Spotify green */
+    --primary-foreground: 0 0% 98%;
 
     --secondary: 240 3.7% 15.9%;
     --secondary-foreground: 0 0% 98%;
 
     --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
+    --muted-foreground: 0 0% 60%;
 
-    --accent: 240 3.7% 15.9%;
+    --accent: 134 70% 45%; /* Spotify accent */
     --accent-foreground: 0 0% 98%;
 
     --destructive: 0 62.8% 30.6%;
@@ -72,7 +73,7 @@
 
     --border: 240 3.7% 15.9%;
     --input: 240 3.7% 15.9%;
-    --ring: 240 4.9% 83.9%;
+    --ring: 121 81% 45%;
 
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
@@ -124,11 +125,11 @@
   }
 
   table th {
-    @apply font-medium text-muted-foreground text-xs uppercase tracking-wider px-6 py-3;
+    @apply font-medium text-muted-foreground text-xs uppercase tracking-wider px-4 py-3 whitespace-nowrap sticky top-0 bg-background z-10;
   }
 
   table td {
-    @apply px-6 py-4 align-middle;
+    @apply px-4 py-3 align-middle whitespace-nowrap;
   }
 
   table tr {
@@ -158,7 +159,7 @@
   }
 
   .form-container {
-    @apply rounded-xl border border-border/50 bg-card shadow-sm p-6 mt-8;
+    @apply rounded-xl border border-border/50 bg-card shadow-sm p-4 md:p-6;
   }
 
   .form-group {

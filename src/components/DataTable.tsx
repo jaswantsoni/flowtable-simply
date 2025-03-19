@@ -1,8 +1,9 @@
 
 import React from "react";
 import { Publisher, Advertiser } from "@/types";
-import { formatCurrency, formatNumber, formatDate } from "@/lib/data";
+import { formatCurrency, formatNumber } from "@/lib/data";
 import TableHeader from "./TableHeader";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Table,
   TableHeader as ShadcnTableHeader,
@@ -40,7 +41,7 @@ const DataTable = <T extends Advertiser | Publisher>({
   const renderTable = () => {
     if (data.length === 0) {
       return (
-        <div className="p-12 text-center text-muted-foreground">
+        <div className="p-8 text-center text-muted-foreground">
           <p>No data available</p>
         </div>
       );
@@ -59,21 +60,29 @@ const DataTable = <T extends Advertiser | Publisher>({
     <Table>
       <ShadcnTableHeader>
         <TableRow>
-          <TableHead>ID</TableHead>
-          <TableHead>Name</TableHead>
-          <TableHead>Capping</TableHead>
-          <TableHead>Used Capping</TableHead>
+          <TableHead className="w-1/4">ID</TableHead>
+          <TableHead className="w-1/4">Name</TableHead>
+          <TableHead className="w-1/4">Capping</TableHead>
+          <TableHead className="w-1/4">Used Capping</TableHead>
         </TableRow>
       </ShadcnTableHeader>
       <TableBody>
-        {advertisers.map((advertiser) => (
-          <TableRow key={advertiser.id} className="group">
-            <TableCell>{advertiser.id}</TableCell>
-            <TableCell className="font-medium">{advertiser.name}</TableCell>
-            <TableCell>{formatCurrency(advertiser.budget)}</TableCell>
-            <TableCell>{formatCurrency(advertiser.spent)}</TableCell>
+        {advertisers.length > 0 ? (
+          advertisers.map((advertiser) => (
+            <TableRow key={advertiser.id} className="group">
+              <TableCell>{advertiser.id}</TableCell>
+              <TableCell className="font-medium">{advertiser.name}</TableCell>
+              <TableCell>{formatCurrency(advertiser.budget)}</TableCell>
+              <TableCell>{formatCurrency(advertiser.spent)}</TableCell>
+            </TableRow>
+          ))
+        ) : (
+          <TableRow>
+            <TableCell colSpan={4} className="h-24 text-center">
+              No advertisers available
+            </TableCell>
           </TableRow>
-        ))}
+        )}
       </TableBody>
     </Table>
   );
@@ -82,13 +91,13 @@ const DataTable = <T extends Advertiser | Publisher>({
     <Table>
       <ShadcnTableHeader>
         <TableRow>
-          <TableHead>ID</TableHead>
-          <TableHead>Name</TableHead>
-          <TableHead>Cap</TableHead>
-          <TableHead>Block Rule</TableHead>
-          <TableHead>Used Cap</TableHead>
-          <TableHead>Total Success Hits</TableHead>
-          <TableHead>Blocked</TableHead>
+          <TableHead className="w-[12%]">ID</TableHead>
+          <TableHead className="w-[16%]">Name</TableHead>
+          <TableHead className="w-[12%]">Cap</TableHead>
+          <TableHead className="w-[12%]">Block Rule</TableHead>
+          <TableHead className="w-[12%]">Used Cap</TableHead>
+          <TableHead className="w-[16%]">Total Success Hits</TableHead>
+          <TableHead className="w-[12%]">Blocked</TableHead>
         </TableRow>
       </ShadcnTableHeader>
       <TableBody>
@@ -104,10 +113,10 @@ const DataTable = <T extends Advertiser | Publisher>({
               <span
                 className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${
                   publisher.status === "Active"
-                    ? "bg-green-50 text-green-700"
+                    ? "bg-green-50 text-green-700 dark:bg-green-900/30 dark:text-green-400"
                     : publisher.status === "Pending"
-                    ? "bg-amber-50 text-amber-700"
-                    : "bg-red-50 text-red-700"
+                    ? "bg-amber-50 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400"
+                    : "bg-red-50 text-red-700 dark:bg-red-900/30 dark:text-red-400"
                 }`}
               >
                 {publisher.status}
@@ -120,7 +129,7 @@ const DataTable = <T extends Advertiser | Publisher>({
   );
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-3 h-full flex flex-col">
       <TableHeader
         title={title}
         onFlush={onFlush}
@@ -128,7 +137,7 @@ const DataTable = <T extends Advertiser | Publisher>({
         isLoading={isLoading}
       />
       
-      <div className="relative overflow-hidden">
+      <div className="flex-1 overflow-hidden rounded-md border bg-background">
         {isLoading ? (
           <div className="flex justify-center items-center py-12">
             <div className="flex flex-col items-center">
@@ -137,9 +146,9 @@ const DataTable = <T extends Advertiser | Publisher>({
             </div>
           </div>
         ) : (
-          <div className="bg-background rounded-md border">
+          <ScrollArea className="h-[350px]">
             {renderTable()}
-          </div>
+          </ScrollArea>
         )}
       </div>
     </div>
