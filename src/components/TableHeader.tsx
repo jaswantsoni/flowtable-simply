@@ -1,5 +1,5 @@
 
-import { Refresh, Trash2 } from "lucide-react";
+import { RefreshCw, Trash2 } from "lucide-react";
 
 interface TableHeaderProps {
   title: string;
@@ -37,7 +37,7 @@ const TableHeader = ({ title, onFlush, onRefresh, isLoading }: TableHeaderProps)
                     disabled:opacity-50 disabled:pointer-events-none"
           aria-label="Refresh data"
         >
-          <Refresh className={`mr-1.5 h-3.5 w-3.5 ${isLoading ? "animate-spin" : ""}`} />
+          <RefreshCw className={`mr-1.5 h-3.5 w-3.5 ${isLoading ? "animate-spin" : ""}`} />
           <span>Refresh</span>
         </button>
       </div>

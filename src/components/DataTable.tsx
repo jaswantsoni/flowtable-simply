@@ -19,11 +19,12 @@ const DataTable = <T extends Advertiser | Publisher>({
   onFlush,
   onRefresh
 }: DataTableProps<T>) => {
-  const isAdvertiserData = (item: T): item is Advertiser => {
+  // Fixed type predicates to use proper type guards
+  const isAdvertiserData = (item: any): item is Advertiser => {
     return "budget" in item;
   };
 
-  const isPublisherData = (item: T): item is Publisher => {
+  const isPublisherData = (item: any): item is Publisher => {
     return "impressions" in item;
   };
 
