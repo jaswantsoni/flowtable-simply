@@ -1,26 +1,39 @@
+export interface Country {
+  id: number;
+  name: string;
+}
+
+export interface Operator {
+  id: number;
+  name: string;
+}
+
+export interface FallbackAdvertiser {
+  id: number;
+  name: string;
+}
 
 export interface Advertiser {
   id: string;
   name: string;
-  budget: number;
-  spent: number;
-  campaigns: number;
-  status: 'Active' | 'Paused' | 'Completed';
-  lastUpdated: string;
+  capping: string;
+  fallback_advertiser: FallbackAdvertiser | null;
+  Country: Country;
+  Operator: Operator;
+  Used_Cap: number;
 }
 
 export interface Publisher {
-  id: string;
+  id: number;
   name: string;
-  category: string;
-  impressions: number;
-  clicks: number;
-  revenue: number;
-  status: 'Active' | 'Pending' | 'Suspended';
-  lastUpdated: string;
+  cap: number;
+  block_rule: string;
+  Used_Cap: number;
+  Total_success_hits: number;
+  Blocked: number;
 }
 
 export interface FormData {
-  campaignId: string;
-  hits: number;
+  campaign_id: number;
+  no_of_hits: number;
 }

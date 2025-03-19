@@ -1,7 +1,5 @@
-
 import React from "react";
 import { Publisher, Advertiser } from "@/types";
-import { formatCurrency, formatNumber } from "@/lib/data";
 import TableHeader from "./TableHeader";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
@@ -17,6 +15,7 @@ interface DataTableProps<T> {
   data: T[];
   title: string;
   isLoading: boolean;
+  dataCat: string;
   onFlush: () => void;
   onRefresh: () => void;
 }
@@ -25,21 +24,22 @@ const DataTable = <T extends Advertiser | Publisher>({
   data,
   title,
   isLoading,
+  dataCat,
   onFlush,
   onRefresh
 }: DataTableProps<T>) => {
+
+
   // Fixed type predicates to use proper type guards
-  const isAdvertiserData = (item: any): item is Advertiser => {
-    return "budget" in item;
-  };
-
-  const isPublisherData = (item: any): item is Publisher => {
-    return "impressions" in item;
-  };
-
+  const isAdvertiserData = dataCat == "advertisers";
+  const isPublisherData = dataCat == "publishers";
+  console.log("DataCat:", dataCat); // Log the data category to debug
+  console.log("Data:", data); // Log the data to debug
+  console.log(isAdvertiserData); // Log the loading
+  console.log(isPublisherData); // Log the loading
   // Determine whether to render advertiser or publisher table
   const renderTable = () => {
-    if (data.length === 0) {
+    if (!Array.isArray(data) || data.length === 0) {
       return (
         <div className="p-8 text-center text-muted-foreground">
           <p>No data available</p>
@@ -47,9 +47,11 @@ const DataTable = <T extends Advertiser | Publisher>({
       );
     }
 
-    if (isAdvertiserData(data[0])) {
+    console.log("Data:", data); // Log the data to debug
+
+    if (isAdvertiserData) {
       return renderAdvertiserTable(data as Advertiser[]);
-    } else if (isPublisherData(data[0])) {
+    } else if (isPublisherData) {
       return renderPublisherTable(data as Publisher[]);
     }
 
@@ -60,29 +62,27 @@ const DataTable = <T extends Advertiser | Publisher>({
     <Table>
       <ShadcnTableHeader>
         <TableRow>
-          <TableHead className="w-1/4">ID</TableHead>
-          <TableHead className="w-1/4">Name</TableHead>
-          <TableHead className="w-1/4">Capping</TableHead>
-          <TableHead className="w-1/4">Used Capping</TableHead>
+          <TableHead className="w-1/7">ID</TableHead>
+          <TableHead className="w-1/7">Name</TableHead>
+          <TableHead className="w-1/7">Capping</TableHead>
+          <TableHead className="w-1/7">Used Cap</TableHead>
+          <TableHead className="w-1/7">Country</TableHead>
+          <TableHead className="w-1/7">Operator</TableHead>
+          <TableHead className="w-1/7">Fallback Advertiser</TableHead>
         </TableRow>
       </ShadcnTableHeader>
       <TableBody>
-        {advertisers.length > 0 ? (
-          advertisers.map((advertiser) => (
-            <TableRow key={advertiser.id} className="group">
-              <TableCell>{advertiser.id}</TableCell>
-              <TableCell className="font-medium">{advertiser.name}</TableCell>
-              <TableCell>{formatCurrency(advertiser.budget)}</TableCell>
-              <TableCell>{formatCurrency(advertiser.spent)}</TableCell>
-            </TableRow>
-          ))
-        ) : (
-          <TableRow>
-            <TableCell colSpan={4} className="h-24 text-center">
-              No advertisers available
-            </TableCell>
+        {advertisers.map((advertiser) => (
+          <TableRow key={advertiser.id} className="group">
+            <TableCell>{advertiser.id}</TableCell>
+            <TableCell className="font-medium">{advertiser.name}</TableCell>
+            <TableCell>{advertiser.capping}</TableCell>
+            <TableCell>{advertiser.Used_Cap}</TableCell>
+            <TableCell>{advertiser.Country.name}</TableCell>
+            <TableCell>{advertiser.Operator.name}</TableCell>
+            <TableCell>{advertiser.fallback_advertiser ? advertiser.fallback_advertiser.name : "None"}</TableCell>
           </TableRow>
-        )}
+        ))}
       </TableBody>
     </Table>
   );
@@ -91,13 +91,13 @@ const DataTable = <T extends Advertiser | Publisher>({
     <Table>
       <ShadcnTableHeader>
         <TableRow>
-          <TableHead className="w-[12%]">ID</TableHead>
-          <TableHead className="w-[16%]">Name</TableHead>
-          <TableHead className="w-[12%]">Cap</TableHead>
-          <TableHead className="w-[12%]">Block Rule</TableHead>
-          <TableHead className="w-[12%]">Used Cap</TableHead>
-          <TableHead className="w-[16%]">Total Success Hits</TableHead>
-          <TableHead className="w-[12%]">Blocked</TableHead>
+          <TableHead className="w-1/7">ID</TableHead>
+          <TableHead className="w-1/7">Name</TableHead>
+          <TableHead className="w-1/7">Cap</TableHead>
+          <TableHead className="w-1/7">Block Rule</TableHead>
+          <TableHead className="w-1/7">Used Cap</TableHead>
+          <TableHead className="w-1/7">Total Success Hits</TableHead>
+          <TableHead className="w-1/7">Blocked</TableHead>
         </TableRow>
       </ShadcnTableHeader>
       <TableBody>
@@ -105,23 +105,11 @@ const DataTable = <T extends Advertiser | Publisher>({
           <TableRow key={publisher.id} className="group">
             <TableCell>{publisher.id}</TableCell>
             <TableCell className="font-medium">{publisher.name}</TableCell>
-            <TableCell>{formatNumber(publisher.impressions)}</TableCell>
-            <TableCell>{publisher.category}</TableCell>
-            <TableCell>{formatNumber(publisher.clicks)}</TableCell>
-            <TableCell>{formatCurrency(publisher.revenue)}</TableCell>
-            <TableCell>
-              <span
-                className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${
-                  publisher.status === "Active"
-                    ? "bg-green-50 text-green-700 dark:bg-green-900/30 dark:text-green-400"
-                    : publisher.status === "Pending"
-                    ? "bg-amber-50 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400"
-                    : "bg-red-50 text-red-700 dark:bg-red-900/30 dark:text-red-400"
-                }`}
-              >
-                {publisher.status}
-              </span>
-            </TableCell>
+            <TableCell>{publisher.cap}</TableCell>
+            <TableCell>{publisher.block_rule}</TableCell>
+            <TableCell>{publisher.Used_Cap}</TableCell>
+            <TableCell>{publisher.Total_success_hits}</TableCell>
+            <TableCell>{publisher.Blocked}</TableCell>
           </TableRow>
         ))}
       </TableBody>

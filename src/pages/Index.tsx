@@ -1,40 +1,50 @@
-
 import React, { useState, useEffect } from "react";
 import DataTable from "@/components/DataTable";
 import DataForm from "@/components/DataForm";
 import { Advertiser, Publisher, FormData } from "@/types";
-import { advertisers as initialAdvertisers, publishers as initialPublishers } from "@/lib/data";
 import { toast } from "sonner";
 import ThemeToggle from "@/components/ThemeToggle";
+import { fetchAdvertisers } from "@/types/api/advertiserAPI";
+import { fetchPublishers } from "@/types/api/publisherAPI";
+import { formSubmit } from "@/types/api/submitForm";
 
 const Index = () => {
   const [advertisers, setAdvertisers] = useState<Advertiser[]>([]);
   const [publishers, setPublishers] = useState<Publisher[]>([]);
   const [isAdvertisersLoading, setIsAdvertisersLoading] = useState(false);
   const [isPublishersLoading, setIsPublishersLoading] = useState(false);
-
+  // const baseUrl = import.meta.env.VITE_BASE_URL as string;
+  // console.log(baseUrl);
   // Load initial data
   useEffect(() => {
     loadAdvertisers();
     loadPublishers();
   }, []);
 
-  // Simulate loading advertisers data
-  const loadAdvertisers = () => {
+  // Fetch advertisers data from API
+  const loadAdvertisers = async () => {
     setIsAdvertisersLoading(true);
-    setTimeout(() => {
-      setAdvertisers([...initialAdvertisers]);
+    try {
+      const data = await fetchAdvertisers();
+      setAdvertisers(data.advertisers);
+    } catch (error) {
+      console.error("Failed to load advertisers", error);
+    } finally {
       setIsAdvertisersLoading(false);
-    }, 800);
+    }
   };
 
-  // Simulate loading publishers data
-  const loadPublishers = () => {
+  // Fetch publishers data from API
+  const loadPublishers = async () => {
     setIsPublishersLoading(true);
-    setTimeout(() => {
-      setPublishers([...initialPublishers]);
+    try {
+      const data = await fetchPublishers();
+      setPublishers(data.publishers);
+    } catch (error) {
+      console.error("Failed to load publishers", error);
+    } finally {
       setIsPublishersLoading(false);
-    }, 1200);
+    }
   };
 
   // Flush advertisers data
@@ -58,39 +68,16 @@ const Index = () => {
   };
 
   // Handle form submission
-  const handleFormSubmit = (data: FormData) => {
+  const handleFormSubmit = async (data: FormData) => {
     console.log("Form data submitted:", data);
-    
-    // In a real app, you would use this data to update the tables
-    // This is just a simulation for demonstration purposes
-    if (data.campaignId.startsWith("adv")) {
-      // Update advertiser data (simulated)
-      setIsAdvertisersLoading(true);
-      setTimeout(() => {
-        // Just reload the data for demonstration
-        loadAdvertisers();
-      }, 800);
-    } else if (data.campaignId.startsWith("pub")) {
-      // Update publisher data (simulated)
-      setIsPublishersLoading(true);
-      setTimeout(() => {
-        // Just reload the data for demonstration
-        loadPublishers();
-      }, 800);
-    } else {
-      // If the ID doesn't start with adv or pub, update both (simulated)
-      setIsAdvertisersLoading(true);
-      setIsPublishersLoading(true);
-      setTimeout(() => {
-        loadAdvertisers();
-        loadPublishers();
-      }, 800);
-    }
+    await formSubmit(data);
+    loadAdvertisers();
+    loadPublishers();    
   };
 
   return (
     <div className="min-h-screen bg-background overflow-hidden">
-      <div className="max-w-[1440px] h-screen mx-auto px-4 py-6 flex flex-col">
+      <div className="max-w-[100vw] h-screen mx-auto px-4 py-6 flex flex-col">
         <div className="flex justify-between items-center mb-6">
           <div className="space-y-2 text-left animate-fade-in">
             <h1 className="text-2xl md:text-3xl font-semibold tracking-tight">Data Flow Tables</h1>
@@ -102,13 +89,15 @@ const Index = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 flex-1 overflow-hidden mb-4">
-          <div className="animate-slide-up h-full flex flex-col" style={{ animationDelay: "100ms" }}>
+          <div className="animate-slide-up h-full flex flex-col w-full " style={{ animationDelay: "100ms" }}>
             <DataTable
               title="Advertisers"
               data={advertisers}
               isLoading={isAdvertisersLoading}
+              dataCat="advertisers"
               onFlush={flushAdvertisers}
               onRefresh={loadAdvertisers}
+
             />
           </div>
 
@@ -117,6 +106,7 @@ const Index = () => {
               title="Publishers"
               data={publishers}
               isLoading={isPublishersLoading}
+              dataCat="publishers"
               onFlush={flushPublishers}
               onRefresh={loadPublishers}
             />
