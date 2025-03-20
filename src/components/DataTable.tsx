@@ -125,7 +125,7 @@ const DataTable = <T extends Advertiser | Publisher>({
         isLoading={isLoading}
       />
       
-      <div className="flex-1 overflow-hidden rounded-md border bg-background">
+      <div className="flex-1 overflow-y-scroll rounded-md border bg-background">
         {isLoading ? (
           <div className="flex justify-center items-center py-12">
             <div className="flex flex-col items-center">
@@ -134,7 +134,7 @@ const DataTable = <T extends Advertiser | Publisher>({
             </div>
           </div>
         ) : (
-          <ScrollArea className="h-[350px]">
+          <ScrollArea className="h-[350px] overflow-y-scroll">
             {renderTable()}
           </ScrollArea>
         )}

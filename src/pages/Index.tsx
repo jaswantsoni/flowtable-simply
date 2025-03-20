@@ -80,8 +80,8 @@ const Index = () => {
           <ThemeToggle />
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 flex-1 overflow-hidden mb-4">
-          <div className="animate-slide-up h-full flex flex-col w-full " style={{ animationDelay: "100ms" }}>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 flex-1 max-h-[100%] overflow-y-hidden mb-4">
+          <div className="flex-col w-full max-h-[100%] overflow-y-scroll " style={{ animationDelay: "100ms" }}>
             <DataTable
               title="Advertisers"
               data={advertisers}
@@ -93,7 +93,7 @@ const Index = () => {
             />
           </div>
 
-          <div className="animate-slide-up h-full flex flex-col" style={{ animationDelay: "200ms" }}>
+          <div className="flex-col w-full max-h-[100%] overflow-y-scroll" style={{ animationDelay: "200ms" }}>
             <DataTable
               title="Publishers"
               data={publishers}
