@@ -33,10 +33,10 @@ const DataTable = <T extends Advertiser | Publisher>({
   // Fixed type predicates to use proper type guards
   const isAdvertiserData = dataCat == "advertisers";
   const isPublisherData = dataCat == "publishers";
-  console.log("DataCat:", dataCat); // Log the data category to debug
-  console.log("Data:", data); // Log the data to debug
-  console.log(isAdvertiserData); // Log the loading
-  console.log(isPublisherData); // Log the loading
+  // console.log("DataCat:", dataCat); // Log the data category to debug
+  // console.log("Data:", data); // Log the data to debug
+  // console.log(isAdvertiserData); // Log the loading
+  // console.log(isPublisherData); // Log the loading
   // Determine whether to render advertiser or publisher table
   const renderTable = () => {
     if (!Array.isArray(data) || data.length === 0) {
@@ -47,7 +47,7 @@ const DataTable = <T extends Advertiser | Publisher>({
       );
     }
 
-    console.log("Data:", data); // Log the data to debug
+    // console.log("Data:", data); // Log the data to debug
 
     if (isAdvertiserData) {
       return renderAdvertiserTable(data as Advertiser[]);
@@ -134,7 +134,7 @@ const DataTable = <T extends Advertiser | Publisher>({
             </div>
           </div>
         ) : (
-          <ScrollArea className="h-[350px] overflow-y-scroll">
+          <ScrollArea className="h-auto overflow-y-scroll">
             {renderTable()}
           </ScrollArea>
         )}

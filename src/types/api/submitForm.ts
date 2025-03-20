@@ -8,5 +8,5 @@ export const formSubmit = async (campaign: Omit<FormData, 'id'>): Promise<any> =
       "Content-Type": "application/json",
     },
   });
-  return response.data;
+  return response;
 };
