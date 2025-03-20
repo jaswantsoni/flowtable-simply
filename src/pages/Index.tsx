@@ -7,6 +7,7 @@ import ThemeToggle from "@/components/ThemeToggle";
 import { fetchAdvertisers } from "@/types/api/advertiserAPI";
 import { fetchPublishers } from "@/types/api/publisherAPI";
 import { formSubmit } from "@/types/api/submitForm";
+import { flushRedis } from "@/types/api/flushAPI";
 
 const Index = () => {
   const [advertisers, setAdvertisers] = useState<Advertiser[]>([]);
@@ -17,52 +18,43 @@ const Index = () => {
   // console.log(baseUrl);
   // Load initial data
   useEffect(() => {
-    loadAdvertisers();
-    loadPublishers();
+    loadData();
+    // loadPublishers();
   }, []);
 
   // Fetch advertisers data from API
-  const loadAdvertisers = async () => {
+  const loadData = async () => {
     setIsAdvertisersLoading(true);
+    setIsPublishersLoading(true);
     try {
-      const data = await fetchAdvertisers();
-      setAdvertisers(data.advertisers);
+      const dataAd = await fetchAdvertisers();
+      setAdvertisers(dataAd.advertisers);
+      const dataPb = await fetchPublishers();
+      setPublishers(dataPb.publishers);
     } catch (error) {
       console.error("Failed to load advertisers", error);
     } finally {
       setIsAdvertisersLoading(false);
+      setIsPublishersLoading(false);
     }
   };
 
   // Fetch publishers data from API
-  const loadPublishers = async () => {
-    setIsPublishersLoading(true);
-    try {
-      const data = await fetchPublishers();
-      setPublishers(data.publishers);
-    } catch (error) {
-      console.error("Failed to load publishers", error);
-    } finally {
-      setIsPublishersLoading(false);
-    }
-  };
+  
 
-  // Flush advertisers data
-  const flushAdvertisers = () => {
+
+  
+  // Flush publishers data
+  const flushData = async() => {
     setIsAdvertisersLoading(true);
+    setIsPublishersLoading(true);
+    await flushRedis()
     setTimeout(() => {
       setAdvertisers([]);
-      setIsAdvertisersLoading(false);
-      toast.success("Advertisers data flushed successfully");
-    }, 500);
-  };
-
-  // Flush publishers data
-  const flushPublishers = () => {
-    setIsPublishersLoading(true);
-    setTimeout(() => {
       setPublishers([]);
+      setIsAdvertisersLoading(false);
       setIsPublishersLoading(false);
+      toast.success("Advertisers data flushed successfully");
       toast.success("Publishers data flushed successfully");
     }, 500);
   };
@@ -71,8 +63,8 @@ const Index = () => {
   const handleFormSubmit = async (data: FormData) => {
     console.log("Form data submitted:", data);
     await formSubmit(data);
-    loadAdvertisers();
-    loadPublishers();    
+    loadData();
+    // loadPublishers();    
   };
 
   return (
@@ -80,7 +72,7 @@ const Index = () => {
       <div className="max-w-[100vw] h-screen mx-auto px-4 py-6 flex flex-col">
         <div className="flex justify-between items-center mb-6">
           <div className="space-y-2 text-left animate-fade-in">
-            <h1 className="text-2xl md:text-3xl font-semibold tracking-tight">Data Flow Tables</h1>
+            <h1 className="text-2xl md:text-3xl font-semibold tracking-tight">In-App Testing Platform</h1>
             <p className="text-muted-foreground text-sm md:text-base">
               View and manage advertising and publishing data with interactive tables
             </p>
@@ -95,8 +87,8 @@ const Index = () => {
               data={advertisers}
               isLoading={isAdvertisersLoading}
               dataCat="advertisers"
-              onFlush={flushAdvertisers}
-              onRefresh={loadAdvertisers}
+              onFlush={flushData}
+              onRefresh={loadData}
 
             />
           </div>
@@ -107,8 +99,8 @@ const Index = () => {
               data={publishers}
               isLoading={isPublishersLoading}
               dataCat="publishers"
-              onFlush={flushPublishers}
-              onRefresh={loadPublishers}
+              onFlush={flushData}
+              onRefresh={loadData}
             />
           </div>
         </div>
